@@ -21,9 +21,9 @@ def get_latest_date() -> str:
     return today.strftime("%d-%m-%Y")
 
 
-def get_closest_monday(df: pd.DataFrame, date_field: str) -> str:
+def get_closest_monday(df: pd.DataFrame, date_field: str) -> pd.DataFrame:
     """
-    Computes the closest monday to a given date and returns it as a string
+    Computes the closest monday to a given date and returns it as a dataframe column
     :param
     df: pandas df
     date_field: the field containing the dates we want to calculate the closest monday on
