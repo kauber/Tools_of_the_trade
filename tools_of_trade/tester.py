@@ -1,3 +1,3 @@
 from tools_of_trade.tools import *
 
-get_latest_date()
+print(get_latest_monday())
