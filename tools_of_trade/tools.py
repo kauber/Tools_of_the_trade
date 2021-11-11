@@ -38,3 +38,6 @@ def get_closest_monday(df: pd.DataFrame, date_field: str) -> pd.DataFrame:
     assert (sum(closest_monday.dropna().dt.dayofweek) == 0)
     closest_monday_f = closest_monday.astype(str)
     return closest_monday_f
+
+
+
