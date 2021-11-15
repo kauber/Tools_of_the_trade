@@ -5,11 +5,12 @@ import pandas as pd
 
 
 class FuzzyMatcher(object):
-    def __init__(self, column1: pd.Series, column2: pd.Series, matcher: str, first_char: bool) -> None:
+    def __init__(self, normalization: bool, column1: pd.Series, column2: pd.Series, matcher: str, first_chars: bool) -> None:
+        self.normalization: normalization
         self.matcher = matcher
         self.column1 = column1
         self.column2 = column2
-        self.first_chars = first_char
+        self.first_chars = first_chars
 
 
 
