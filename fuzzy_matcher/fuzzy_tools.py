@@ -16,7 +16,7 @@ class FuzzyMatcher(object):
         self.column2 = column2
         self.first_chars = first_chars
 
-    def name_normalizer(self, column1: pd.Series, column2: pd.Series):
+    def name_normalizer(self, column1: pd.Series, column2: pd.Series) -> pd.DataFrame:
         self.column1 = self.column1.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
         self.column1 = self.column1.str.lower()
         self.column2 = self.column2.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
@@ -24,7 +24,8 @@ class FuzzyMatcher(object):
         # what about replacing substrings?
         self.column1 = list(self.column1.unique())
         self.column2 = list(self.column2.unique())
-        return self.column1, self.column2
+        zipped_list = zip(self.column1, self.column2)
+        return pd.DataFrame(zipped_list, columns=['col1', 'col2'])
 
     def list_maker(self, column1: pd.Series, columns2: pd.Series):
         pass
