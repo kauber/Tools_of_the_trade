@@ -16,12 +16,16 @@ class FuzzyMatcher(object):
         self.column2 = column2
         self.first_chars = first_chars
 
-    def name_normalizer(self, column1: pd.Series, column2: pd.Series) -> pd.DataFrame:
+    def name_normalizer(self, sreplace: bool, replace_list: list) -> pd.DataFrame:
         self.column1 = self.column1.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
         self.column1 = self.column1.str.lower()
         self.column2 = self.column2.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
         self.column2 = self.column2.str.lower()
         # what about replacing substrings?
+        if sreplace:
+            remove_strings = '|'.join(replace_list)
+            self.column1 = self.column1.str.replace(remove_strings, '')
+            self.column2 = self.column2.str.replace(remove_strings, '')
         self.column1 = list(self.column1.unique())
         self.column2 = list(self.column2.unique())
         zipped_list = zip(self.column1, self.column2)
@@ -30,7 +34,7 @@ class FuzzyMatcher(object):
     def list_maker(self, column1: pd.Series, columns2: pd.Series):
         pass
 
-    def fuzzy_matcher(self, column1: pd.Series, column2: pd.Series):
+    def fuzzy_matcher(self, first_chars: bool):
         fuzzy = []
         count = 0
         print('Started at: ' + str(datetime.now().strftime('%H:%M:%S')))
@@ -40,6 +44,6 @@ class FuzzyMatcher(object):
                 print(str(count) + ' records matched at ' + str(datetime.now().strftime('%H:%M:%S')))
             for j in self.column2:
                 if i[:2] == j[:2]:  # pass to param
-                    fuzzy.append([i, j, fuzz.ratio(i, j)])
+                    fuzzy.append([i, j, fuzz.ratio(i, j)])  # we want pass the self.matcher
         name_matching = pd.DataFrame(fuzzy, columns=['col1', 'col2', 'similarity_score'])
         return name_matching
