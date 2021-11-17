@@ -5,10 +5,14 @@ to replace
 
 - option to pass a list with strings to remove OK
 
-- vectorised version of string matching
+- vectorised version of string matching (?)
 
 - add requirements.txt
 
 - filter name matching dataset by similarity score (e.g. above 90, add as a param to fuzzy matcher)
 
-- post processor keep highest similarity score when multiple matches (there might be multiple matches of the same name)
+- post processor:
+ a) keep highest similarity score when multiple matches (there might be multiple matches of the same name)
+ b) set threshold
+
+- the 'normalization' param in fuzzy_matcher does not seem to do much

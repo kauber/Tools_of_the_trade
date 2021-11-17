@@ -16,13 +16,13 @@ class FuzzyMatcher(object):
         self.column2 = column2
         self.first_chars = first_chars
 
-    def name_normalizer(self, sreplace: bool, replace_list: list) -> pd.DataFrame:
+    def name_normalizer(self, doreplace: bool, replace_list: list) -> pd.DataFrame:
         self.column1 = self.column1.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
         self.column1 = self.column1.str.lower()
         self.column2 = self.column2.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
         self.column2 = self.column2.str.lower()
         # what about replacing substrings?
-        if sreplace:
+        if doreplace:
             remove_strings = '|'.join(replace_list)
             self.column1 = self.column1.str.replace(remove_strings, '')
             self.column2 = self.column2.str.replace(remove_strings, '')

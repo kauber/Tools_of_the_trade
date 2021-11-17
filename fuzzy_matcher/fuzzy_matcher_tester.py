@@ -15,6 +15,6 @@ fuzzy_match = FuzzyMatcher(normalization=True,
 
 substrings = ['ltd', 'limited']
 
-new_df = fuzzy_match.name_normalizer(sreplace=True, replace_list=substrings)  # these arguments must be optional
+new_df = fuzzy_match.name_normalizer(doreplace=True, replace_list=substrings)  # these arguments must be optional
 
 res = fuzzy_match.fuzzy_matcher(threshold=3)
