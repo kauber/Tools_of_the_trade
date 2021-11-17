@@ -7,6 +7,7 @@ import pandas as pd
 from fuzzywuzzy import fuzz
 
 
+# what do we want initialized?
 class FuzzyMatcher(object):
     def __init__(self, normalization: bool, column1: pd.Series, column2: pd.Series, matcher: str,
                  first_chars: Optional[int, None]) -> None:

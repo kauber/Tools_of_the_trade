@@ -16,3 +16,7 @@ to replace
  b) set threshold
 
 - the 'normalization' param in fuzzy_matcher does not seem to do much
+
+- the name_normalizer generates a new dataset with the 2 columns that we're passing, but we need to think about this
+choice, for instance in the post processor. often what we want to do is rejoin the data back to the original datasets,
+so we should have normalized names there as well? or shall we just leave it like that for the user to complete?
