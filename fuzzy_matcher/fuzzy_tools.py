@@ -16,16 +16,17 @@ class FuzzyMatcher(object):
         self.column2 = column2
         self.first_chars = first_chars
 
-    def name_normalizer(self, doreplace: bool, replace_list: list) -> pd.DataFrame:
+    def name_normalizer(self, doreplace: bool,  *args, **kwargs) -> pd.DataFrame:
         self.column1 = self.column1.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
         self.column1 = self.column1.str.lower()
         self.column2 = self.column2.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
         self.column2 = self.column2.str.lower()
         if doreplace:
+            replace_list = kwargs.get('replace_list', None)
             remove_strings = '|'.join(replace_list)
             self.column1 = self.column1.str.replace(remove_strings, '')
             self.column2 = self.column2.str.replace(remove_strings, '')
-        self.column1 = list(self.column1.unique())
+        self.column1 = list(self.column1.unique()) # when converted to string, name normalizer can't be run again
         self.column2 = list(self.column2.unique())
         zipped_list = zip(self.column1, self.column2)
         return pd.DataFrame(zipped_list, columns=['col1', 'col2'])
