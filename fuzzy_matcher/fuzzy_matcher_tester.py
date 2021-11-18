@@ -7,8 +7,7 @@ zip_list = zip(list1, list2)
 
 df = pd.DataFrame(zip_list, columns=['column1', 'column2'])
 
-fuzzy_match = FuzzyMatcher(normalization=False,
-                           column1=df.column1,
+fuzzy_match = FuzzyMatcher(column1=df.column1,
                            column2=df.column2,
                            matcher='fuzz.ratio',
                            first_chars=0)

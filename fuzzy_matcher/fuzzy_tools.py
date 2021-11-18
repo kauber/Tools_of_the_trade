@@ -9,16 +9,12 @@ from fuzzywuzzy import fuzz
 
 # what do we want initialized?
 class FuzzyMatcher(object):
-    def __init__(self, normalization: bool, column1: pd.Series, column2: pd.Series, matcher: str,
-                 first_chars: int) -> None:
-        self.normalization = normalization
+    def __init__(self, column1: pd.Series, column2: pd.Series, matcher: str,
+                 first_chars: 0) -> None:
         self.matcher = matcher
         self.column1 = column1
         self.column2 = column2
         self.first_chars = first_chars
-        if self.normalization:
-            pass
-            #print('ok, ok')
 
     def name_normalizer(self, doreplace: bool, replace_list: list) -> pd.DataFrame:
         self.column1 = self.column1.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
