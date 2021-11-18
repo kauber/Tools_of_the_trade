@@ -3,11 +3,7 @@ to replace
 
 - Add exception handling
 
-- option to pass a list with strings to remove OK
-
 - vectorised version of string matching (?)
-
-- add requirements.txt
 
 - filter name matching dataset by similarity score (e.g. above 90, add as a param to fuzzy matcher)
 

@@ -2,7 +2,7 @@
 # we then want to wrap the fuzzy matching in a function
 # we also want some quick way to rejoin the fuzzy matching dataset to the master df, or use to filter it
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Tuple
 import pandas as pd
 from fuzzywuzzy import fuzz
 
@@ -10,19 +10,21 @@ from fuzzywuzzy import fuzz
 # what do we want initialized?
 class FuzzyMatcher(object):
     def __init__(self, normalization: bool, column1: pd.Series, column2: pd.Series, matcher: str,
-                 first_chars: Optional[int, None]) -> None:
-        self.normalization: normalization
+                 first_chars: int) -> None:
+        self.normalization = normalization
         self.matcher = matcher
         self.column1 = column1
         self.column2 = column2
         self.first_chars = first_chars
+        if self.normalization:
+            pass
+            #print('ok, ok')
 
     def name_normalizer(self, doreplace: bool, replace_list: list) -> pd.DataFrame:
         self.column1 = self.column1.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
         self.column1 = self.column1.str.lower()
         self.column2 = self.column2.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
         self.column2 = self.column2.str.lower()
-        # what about replacing substrings?
         if doreplace:
             remove_strings = '|'.join(replace_list)
             self.column1 = self.column1.str.replace(remove_strings, '')
@@ -41,7 +43,7 @@ class FuzzyMatcher(object):
             if (count % 1000) == 0:  # pass to param
                 print(str(count) + ' records matched at ' + str(datetime.now().strftime('%H:%M:%S')))
             for j in self.column2:
-                if self.first_chars is not None:
+                if self.first_chars > 0:
                     if i[:self.first_chars] == j[:self.first_chars]:  # pass to param
                         fuzzy.append([i, j, fuzz.ratio(i, j)])
                 else:

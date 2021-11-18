@@ -7,14 +7,16 @@ zip_list = zip(list1, list2)
 
 df = pd.DataFrame(zip_list, columns=['column1', 'column2'])
 
-fuzzy_match = FuzzyMatcher(normalization=True,
+fuzzy_match = FuzzyMatcher(normalization=False,
                            column1=df.column1,
                            column2=df.column2,
                            matcher='fuzz.ratio',
-                           first_chars=2)
+                           first_chars=0)
 
 substrings = ['ltd', 'limited']
 
 new_df = fuzzy_match.name_normalizer(doreplace=True, replace_list=substrings)  # these arguments must be optional
 
 res = fuzzy_match.fuzzy_matcher(threshold=3)
+
+res
