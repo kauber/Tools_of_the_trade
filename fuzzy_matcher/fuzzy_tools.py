@@ -16,7 +16,7 @@ class FuzzyMatcher(object):
         self.column2 = column2
         self.first_chars = first_chars
 
-    def name_normalizer(self, doreplace: bool,  *args, **kwargs) -> pd.DataFrame:
+    def name_normalizer(self, doreplace: bool, *args, **kwargs) -> pd.DataFrame:
         self.column1 = self.column1.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
         self.column1 = self.column1.str.lower()
         self.column2 = self.column2.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
@@ -26,29 +26,32 @@ class FuzzyMatcher(object):
             remove_strings = '|'.join(replace_list)
             self.column1 = self.column1.str.replace(remove_strings, '')
             self.column2 = self.column2.str.replace(remove_strings, '')
-        self.column1 = list(self.column1.unique()) # when converted to string, name normalizer can't be run again
-        self.column2 = list(self.column2.unique())
-        zipped_list = zip(self.column1, self.column2)
-        return pd.DataFrame(zipped_list, columns=['col1', 'col2'])
+        col1 = list(self.column1.unique())  # when converted to list, name normalizer can't be run again
+        col2 = list(self.column2.unique())
+        zipped_list = zip(col1, col2)
+        return pd.DataFrame(zipped_list, columns=['col1', 'col2'])  # pass colnames
 
-    def fuzzy_matcher(self, threshold: int) -> pd.DataFrame:  # leave threshold optional
+    def fuzzy_matcher(self, match_track: int, matcher='ratio', *args,
+                      **kwargs) -> pd.DataFrame:  # leave threshold optional
         fuzzy = []
         count = 0
         print('Matching started at: ' + str(datetime.now().strftime('%H:%M:%S')))
         for i in self.column1:
             count += 1
-            if (count % 1000) == 0:  # pass to param
+            if (count % match_track) == 0:
                 print(str(count) + ' records matched at ' + str(datetime.now().strftime('%H:%M:%S')))
             for j in self.column2:
                 if self.first_chars > 0:
                     if i[:self.first_chars] == j[:self.first_chars]:  # pass to param
                         fuzzy.append([i, j, fuzz.ratio(i, j)])
                 else:
-                    fuzzy.append([i, j, fuzz.ratio(i, j)])
+                    if matcher == 'ratio':
+                        fuzzy.append([i, j, fuzz.ratio(i, j)])
+                        #elif matcher == ''
             # we want pass the self.matcher
         print('Matching completed at: ' + str(datetime.now().strftime('%H:%M:%S')))
         name_matching = pd.DataFrame(fuzzy, columns=['col1', 'col2', 'similarity_score'])
         return name_matching
 
-    def post_processor(self):
+    def post_processor(self):  # threshold, keep highest score by match
         pass
