@@ -8,6 +8,15 @@ from fuzzywuzzy import fuzz
 
 # what do we want initialized?
 class FuzzyMatcher(object):
+    """
+    Initializer: it creates a fuzzymatcher instance
+    @:param column1: column we want to match against column2
+    @:param column2: column we want to match against column1
+    @:param matcher: type of matcher algorithm
+    @:param first_chars: parameter that determines whether we want to perform matching only on strings with n equal
+    first characters (useful if we have too many strings to match)
+    @:return none
+    """
     def __init__(self, column1: pd.Series, column2: pd.Series, matcher: str,
                  first_chars: 0) -> None:
         self.matcher = matcher
