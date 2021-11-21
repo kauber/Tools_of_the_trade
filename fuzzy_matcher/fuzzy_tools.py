@@ -6,7 +6,6 @@ import pandas as pd
 from fuzzywuzzy import fuzz
 
 
-# what do we want initialized?
 class FuzzyMatcher(object):
     """
     Initializer: it creates a fuzzymatcher instance
@@ -43,7 +42,7 @@ class FuzzyMatcher(object):
 
     def fuzzy_matcher(self, first_col: pd.Series, second_col: pd.Series, match_track: int, matcher='fuzz.ratio',
                       *args,
-                      **kwargs) -> pd.DataFrame:  # leave threshold optional
+                      **kwargs) -> pd.DataFrame:
         fuzzy = []
         count = 0
         print('Matching started at: ' + str(datetime.now().strftime('%H:%M:%S')))
@@ -54,7 +53,7 @@ class FuzzyMatcher(object):
                 print(str(count) + ' records matched at ' + str(datetime.now().strftime('%H:%M:%S')))
             for j in second_col:
                 if self.first_chars > 0:
-                    if i[:self.first_chars] == j[:self.first_chars]:  # pass to param
+                    if i[:self.first_chars] == j[:self.first_chars]:
                         fuzzy.append([i, j, fuzz.ratio(i, j)])
                 else:
                     fuzzy.append([i, j, fuzz.ratio(i, j)])
@@ -63,7 +62,7 @@ class FuzzyMatcher(object):
         name_matching = pd.DataFrame(fuzzy, columns=[first_col.name, second_col.name, 'similarity_score'])
         return name_matching
 
-    def post_processor(self, df: pd.DataFrame, highest_matches: bool):  # threshold, keep highest score by match
+    def post_processor(self, df: pd.DataFrame, highest_matches: bool):
         df = df.loc[df['similarity_score'] > self.similarity_threshold]
         if highest_matches:
             indices = df.groupby(df.iloc[:, 0])['similarity_score'].transform(max) == df['similarity_score']
