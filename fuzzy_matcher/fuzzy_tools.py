@@ -17,6 +17,7 @@ class FuzzyMatcher(object):
     first characters (useful if we have too many strings to match)
     @:return none
     """
+
     def __init__(self, column1: pd.Series, column2: pd.Series, matcher: str,
                  first_chars: 0) -> None:
         self.matcher = matcher
@@ -39,11 +40,13 @@ class FuzzyMatcher(object):
         zipped_list = zip(col1, col2)
         return pd.DataFrame(zipped_list, columns=['col1', 'col2'])  # pass colnames
 
-    def fuzzy_matcher(self, first_col: pd.Series, second_col: pd.Series, match_track: int, matcher='fuzz.ratio', *args,
+    def fuzzy_matcher(self, first_col: pd.Series, second_col: pd.Series, match_track: int, matcher='fuzz.ratio',
+                      *args,
                       **kwargs) -> pd.DataFrame:  # leave threshold optional
         fuzzy = []
         count = 0
         print('Matching started at: ' + str(datetime.now().strftime('%H:%M:%S')))
+        # matcher = kwargs.get('matcher', None)
         for i in first_col:
             count += 1
             if (count % match_track) == 0:
