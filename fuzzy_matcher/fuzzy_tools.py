@@ -39,7 +39,7 @@ class FuzzyMatcher(object):
         zipped_list = zip(col1, col2)
         return pd.DataFrame(zipped_list, columns=['col1', 'col2'])  # pass colnames
 
-    def fuzzy_matcher(self, first_col: pd.Series, second_col: pd.Series, match_track: int, matcher='ratio', *args,
+    def fuzzy_matcher(self, first_col: pd.Series, second_col: pd.Series, match_track: int, matcher='fuzz.ratio', *args,
                       **kwargs) -> pd.DataFrame:  # leave threshold optional
         fuzzy = []
         count = 0
