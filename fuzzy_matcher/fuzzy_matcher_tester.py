@@ -12,17 +12,22 @@ df = pd.DataFrame(zip_list, columns=['column1', 'column2'])
 fuzzy_match = FuzzyMatcher(column1=df.column1,
                            column2=df.column2,
                            matcher='fuzz.ratio',
-                           first_chars=0)
+                           first_chars=0,
+                           similarity_threshold=60)
 
 substrings = ['ltd', 'limited']
 
-new_df = fuzzy_match.name_normalizer(do_replace=True, replace_list=substrings)  # these arguments must be optional
-res = fuzzy_match.fuzzy_matcher(first_col=new_df.col1, second_col=new_df.col2, match_track=5)
+new_df = fuzzy_match.name_normalizer(do_replace=True, replace_list=substrings, colname1='test1',
+                                     colname2='test2')  # these arguments must be optional
+res = fuzzy_match.fuzzy_matcher(first_col=new_df.test1, second_col=new_df.test2, match_track=25)
+
+fin_res = fuzzy_match.post_processor(res, highest_matches=False)
 
 fuzzy_match2 = FuzzyMatcher(column1=df.column1,
                             column2=df.column2,
                             matcher='fuzz.ratio',
-                            first_chars=1)
+                            first_chars=1,
+                            similarity_threshold=0)
 
 new_df2 = fuzzy_match2.name_normalizer(do_replace=False)  # these arguments must be optional
 res2 = fuzzy_match2.fuzzy_matcher(first_col=new_df2.col1, second_col=new_df2.col2, match_track=5, matcher='fuzz.ratio')

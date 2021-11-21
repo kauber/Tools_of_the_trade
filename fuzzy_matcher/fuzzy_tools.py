@@ -19,13 +19,14 @@ class FuzzyMatcher(object):
     """
 
     def __init__(self, column1: pd.Series, column2: pd.Series, matcher: str,
-                 first_chars: 0) -> None:
+                 first_chars: 0, similarity_threshold: 0) -> None:
         self.matcher = matcher
         self.column1 = column1
         self.column2 = column2
         self.first_chars = first_chars
+        self.similarity_threshold = similarity_threshold
 
-    def name_normalizer(self, do_replace: bool, *args, **kwargs) -> pd.DataFrame:
+    def name_normalizer(self, do_replace: bool, colname1: str, colname2: str, *args, **kwargs) -> pd.DataFrame:
         self.column1 = self.column1.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
         self.column1 = self.column1.str.lower()
         self.column2 = self.column2.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
@@ -38,7 +39,7 @@ class FuzzyMatcher(object):
         col1 = list(self.column1.unique())
         col2 = list(self.column2.unique())
         zipped_list = zip(col1, col2)
-        return pd.DataFrame(zipped_list, columns=['col1', 'col2'])  # pass colnames
+        return pd.DataFrame(zipped_list, columns=[colname1, colname2])  # pass colnames
 
     def fuzzy_matcher(self, first_col: pd.Series, second_col: pd.Series, match_track: int, matcher='fuzz.ratio',
                       *args,
@@ -59,8 +60,14 @@ class FuzzyMatcher(object):
                     fuzzy.append([i, j, fuzz.ratio(i, j)])
             # we want pass the self.matcher
         print('Matching completed at: ' + str(datetime.now().strftime('%H:%M:%S')))
-        name_matching = pd.DataFrame(fuzzy, columns=['col1', 'col2', 'similarity_score'])
+        name_matching = pd.DataFrame(fuzzy, columns=[first_col.name, second_col.name, 'similarity_score'])
         return name_matching
 
-    def post_processor(self):  # threshold, keep highest score by match
-        pass
+    def post_processor(self, df: pd.DataFrame, highest_matches: bool):  # threshold, keep highest score by match
+        df = df.loc[df['similarity_score'] > self.similarity_threshold]
+        if highest_matches:
+            indices = df.groupby(df.iloc[:, 0])['similarity_score'].transform(max) == df['similarity_score']
+            df_out = df[indices]
+            df_out.reset_index(drop=True, inplace=True)
+            return df_out
+        return df
