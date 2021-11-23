@@ -18,7 +18,7 @@ fuzzy_match = FuzzyMatcher(column1=df.column1,
 substrings = ['ltd', 'limited']
 
 new_df = fuzzy_match.name_normalizer(do_replace=True, replace_list=substrings, colname1='test1',
-                                     colname2='test2')  # these arguments must be optional
+                                     colname2='test2')
 res = fuzzy_match.fuzzy_matcher(first_col=new_df.test1, second_col=new_df.test2, match_track=25)
 
 fin_res = fuzzy_match.post_processor(res, highest_matches=False)

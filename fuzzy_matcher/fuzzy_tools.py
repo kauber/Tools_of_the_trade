@@ -26,6 +26,16 @@ class FuzzyMatcher(object):
         self.similarity_threshold = similarity_threshold
 
     def name_normalizer(self, do_replace: bool, colname1: str, colname2: str, *args, **kwargs) -> pd.DataFrame:
+        """
+        This is a method that implements string normalization. We can pass a list of strings to be removed from
+        the strings we're matching. Non alphanumeric values will be removed by default
+        :param do_replace: boolean: if true we can pass a list of strings we want removed from the names we're matching
+        :param colname1: name of the first column
+        :param colname2: name of the second column
+        :param args:
+        :param kwargs:
+        :return: A new df with colnames specified above, and strings normalized
+        """
         self.column1 = self.column1.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
         self.column1 = self.column1.str.lower()
         self.column2 = self.column2.str.replace('[^a-zA-Z0-9]', '', regex=True).str.strip()
@@ -64,7 +74,7 @@ class FuzzyMatcher(object):
 
     def post_processor(self, df: pd.DataFrame, highest_matches: bool):
         """
-        This function implements some post-processing on the data. Namely, it keeps only rows with similarity score
+        This method implements some post-processing on the data. Namely, it keeps only rows with similarity score
         above a certain threshold (defined when the class is initialized) and optionally keeps matches with highest
         similarity score among all matches
         :param df: dataframe we want to process
