@@ -9,12 +9,12 @@ from fuzzywuzzy import fuzz
 class FuzzyMatcher(object):
     """
     Initializer: it creates a fuzzymatcher instance
-    @:param column1: column we want to match against column2
-    @:param column2: column we want to match against column1
-    @:param matcher: type of matcher algorithm
-    @:param first_chars: parameter that determines whether we want to perform matching only on strings with n equal
+    :param column1: column we want to match against column2
+    :param column2: column we want to match against column1
+    :param matcher: type of matcher algorithm
+    :param first_chars: parameter that determines whether we want to perform matching only on strings with n equal
     first characters (useful if we have too many strings to match)
-    @:return none
+    :return none
     """
 
     def __init__(self, column1: pd.Series, column2: pd.Series, matcher: str,
@@ -63,6 +63,14 @@ class FuzzyMatcher(object):
         return name_matching
 
     def post_processor(self, df: pd.DataFrame, highest_matches: bool):
+        """
+        This function implements some post-processing on the data. Namely, it keeps only rows with similarity score
+        above a certain threshold (defined when the class is initialized) and optionally keeps matches with highest
+        similarity score among all matches
+        :param df: dataframe we want to process
+        :param highest_matches: keep match with highest similarity score among all possible matches
+        :return: processed df
+        """
         df = df.loc[df['similarity_score'] > self.similarity_threshold]
         if highest_matches:
             indices = df.groupby(df.iloc[:, 0])['similarity_score'].transform(max) == df['similarity_score']
