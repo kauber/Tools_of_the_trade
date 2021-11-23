@@ -17,7 +17,7 @@ class FuzzyMatcher(object):
     :return none
     """
 
-    def __init__(self, column1: pd.Series, column2: pd.Series, matcher: str,
+    def __init__(self, column1: pd.Series, column2: pd.Series, matcher: fuzz.ratio,
                  first_chars: 0, similarity_threshold: 0) -> None:
         self.matcher = matcher
         self.column1 = column1
@@ -54,9 +54,9 @@ class FuzzyMatcher(object):
             for j in second_col:
                 if self.first_chars > 0:
                     if i[:self.first_chars] == j[:self.first_chars]:
-                        fuzzy.append([i, j, fuzz.ratio(i, j)])
+                        fuzzy.append([i, j, self.matcher(i, j)])
                 else:
-                    fuzzy.append([i, j, fuzz.ratio(i, j)])
+                    fuzzy.append([i, j, self.matcher(i, j)])
             # we want pass the self.matcher
         print('Matching completed at: ' + str(datetime.now().strftime('%H:%M:%S')))
         name_matching = pd.DataFrame(fuzzy, columns=[first_col.name, second_col.name, 'similarity_score'])
