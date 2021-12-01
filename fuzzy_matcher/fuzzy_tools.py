@@ -93,7 +93,7 @@ class FuzzyMatcher(object):
         :param highest_matches: keep match with highest similarity score among all possible matches
         :return: processed df
         """
-        df = df.loc[df['similarity_score'] > self.similarity_threshold]
+        df = df.loc[df['similarity_score'] >= self.similarity_threshold]
         if highest_matches:
             indices = df.groupby(df.iloc[:, 0])['similarity_score'].transform(max) == df['similarity_score']
             df_out = df[indices]
