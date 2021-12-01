@@ -53,6 +53,18 @@ class FuzzyMatcher(object):
     def fuzzy_matcher(self, first_col: pd.Series, second_col: pd.Series, match_track: int, matcher='fuzz.ratio',
                       *args,
                       **kwargs) -> pd.DataFrame:
+        """
+
+        :param first_col: The first string column we want to match
+        :param second_col: The string column we want to match the first column against
+        :param match_track: How many matches have to occur before a print statement gives an update on the number of
+        matches performed
+        :param matcher: one of the functions available in the fuzzy wuzzy package, default is fuzz.ratio, can also be
+        fuzz.token_ratio or fuzz.partial_ratio
+        :param args:
+        :param kwargs:
+        :return: df with first_col, second_col and a similarity score
+        """
         fuzzy = []
         count = 0
         print('Matching started at: ' + str(datetime.now().strftime('%H:%M:%S')))
