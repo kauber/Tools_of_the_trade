@@ -26,10 +26,10 @@ function from the fuzzywuzzy package we want: default will be fuzz.ratio, but we
 Documentation can be found [here](https://pypi.org/project/fuzzywuzzy/).
 
 The *first char* parameter specifies whether we want to only match strings starting with a n amount
-of overlapping characters. This feature might be useful if we have a very large number of matches: in fact, let's consider that if
+of overlapping characters. Default will be zero. This feature might be useful if we have a very large number of matches: in fact, let's consider that if
 we have a list of n strings to match with a list of m strings, the total matches the algorithm will perform is n * m, i.e. matching 2 lists of
 1000 strings will require 1 million matches. 
-Only matching strings that start with the same character (n = 1) will save a lot of 
+Only matching strings that start with the same character (first_char = 1) will save a lot of 
 potentially useless matches, and reduce the computational load.
 
 The *similarity threshold* parameter specifies which matches we will keep for inspection. The parameter is passed to the
