@@ -13,9 +13,12 @@ The three main methods after initializing an instance of the fuzzy matcher class
 
 The *string_normalizer* implements some transformations on the strings we want to match, such as transforming to lower case,
 removing non alpha-numeric characters, or removing substrings we don't need; an example might be removing
-all instances of __limited__ or __ltd__ from company names. This is because limited (or ltd) might affect fuzzy matching if the naming
+all instances of __limited__ or __ltd__ from company names. 
+</br>
+This is because limited (or ltd) might affect fuzzy matching if the naming
 convention differs between lists, so *dummy transports ltd* and *dummy transports limited* will produce a lower similarity
 score, despite being most likely the same company.
+<br>
 
 The *fuzzy_matcher* method is the method performing the fuzzy matching.
 
@@ -72,7 +75,7 @@ remove_list = ['ltd','limited']
 and pass it to the argument *replace_list*. *colname1* and *colname2* are the names we want to assign to the columns
 of the resulting dataframe.
 
-Then, we can implement the actually fuzzy matching by calling the method:
+Then, we can implement the actual fuzzy matching by calling the method:
 
 ```
 res = fuzzy_match.fuzzy_matcher(first_col=new_df.test1, 
@@ -92,15 +95,14 @@ fin_res = fuzzy_match.post_processor(res, highest_matches=False)
 Calling this method will do two main things: if we have a *similarity_threshold* defined, 
 the output will be a dataframe that only has matches equal or above the threshold (e.g., only
 matches with a similarity score of 60 or more).
-
 *highest_matches* is an argument that determines whether we want to keep only the highest matches
 by string. 
 </br>
-Suppose a string is matched against 3 other strings, and they all produce high similarity scores, for instance:
-84, 93, 89. 
+Suppose a string has high similarity scores with 3 other strings, for instance:
+84, 93, 89, meaning that there are 3 good potential matches. 
 <br>
-In most cases, the match with the 93 similarity score will be the correct one, so 
-*highest_matches* will remove the other two matches and only keep the one with 93.
+In most cases, the match with the highest (93) similarity score will be the correct one, so 
+*highest_matches* will remove the other two matches and only keep the one with a similiarity score of 93.
 <br>
 This feature might be useful if we need to merge the output to other dataframes, and we don't want
 unnecessary duplication.
