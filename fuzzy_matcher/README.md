@@ -1,4 +1,4 @@
-# Fuzzy Matcher
+# Fuzzy Matching in Python made eas(ier)
 
 Often confronted with the need to perform fuzzy matching, be it for removing duplicate records or
 doing entity resolution, I built a simple helper package to speed up and simplify part of the job.
