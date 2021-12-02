@@ -25,7 +25,7 @@ class FuzzyMatcher(object):
         self.first_chars = first_chars
         self.similarity_threshold = similarity_threshold
 
-    def name_normalizer(self, do_replace: bool, colname1: str, colname2: str, *args, **kwargs) -> pd.DataFrame:
+    def string_normalizer(self, do_replace: bool, colname1: str, colname2: str, *args, **kwargs) -> pd.DataFrame:
         """
         This is a method that implements string normalization. We can pass a list of strings to be removed from
         the strings we're matching. Non alphanumeric values will be removed by default
