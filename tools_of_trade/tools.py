@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 import pandas as pd
+import numpy as np
 from typing import Optional
 
 
@@ -40,4 +41,28 @@ def get_closest_monday(df: pd.DataFrame, date_field: str) -> pd.DataFrame:
     return closest_monday_f
 
 
+def mean_updater(mean1: float, mean2: float, n1: int, n2: int):
+    """
+    This function computes the combined mean of two separate groups
+    :param mean1: mean of the first group
+    :param mean2: mean of the second group
+    :param n1: size of first group
+    :param n2: size of second group
+    :return: combined means of the two groups
+    """
+    return ((mean1 * n1) + (mean2 * n2)) / (n1 + n2)
 
+
+def std_updater(mean1: float, mean2: float, std1: float, std2: float, n1: int, n2: int):
+    """
+    This function computes the combined std (or variance) for the separate groups
+    :param mean1: mean of the first group
+    :param mean2: mean of the second group
+    :param std1: std of the first group
+    :param std2: std of the second group
+    :param n1: size of the first group
+    :param n2: size of the second group
+    :return:
+    """
+    d1 = mean_updater(mean1, mean2, n1, n2)
+    return np.sqrt((n1 * (std1 ** 2 + (d1 - mean1) ** 2) + (n2 * (std2 ** 2 + (d1 - mean2) ** 2))) / (n1 + n2))
